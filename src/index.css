@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-btn hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-card hover:bg-dark-border text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+
+  .btn-success {
+    @apply bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 bg-dark-card border border-dark-border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-btn transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-dark-card border border-dark-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200;
+  }
+
+  .table-header {
+    @apply bg-dark-bg text-gray-300 uppercase text-xs font-medium tracking-wider;
+  }
+
+  .table-row {
+    @apply hover:bg-dark-bg transition-colors duration-150;
+  }
+
+  .tag-chip {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-btn/20 text-primary-btn hover:bg-primary-btn/30 transition-colors duration-200;
+  }
+
+  .tag-chip.profit {
+    @apply bg-green-600/20 text-profit hover:bg-green-600/30;
+  }
+
+  .tag-chip.loss {
+    @apply bg-red-600/20 text-loss hover:bg-red-600/30;
+  }
+
+  .fade-in {
+    @apply animate-fade-in;
+  }
+
+  .slide-up {
+    @apply animate-slide-up;
+  }
+
+  .nav-link {
+    @apply flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-dark-bg transition-colors duration-200;
+  }
+
+  .nav-link.active {
+    @apply bg-primary-btn/20 text-primary-btn;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-border rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+.react-calendar {
+  @apply bg-dark-card border border-dark-border rounded-lg;
+}
+
+.react-calendar__tile {
+  @apply text-white hover:bg-dark-bg rounded;
+}
+
+.react-calendar__tile--active {
+  @apply bg-primary-btn;
+}
+
+.react-calendar__navigation button {
+  @apply text-white hover:bg-dark-bg;
+}
+
+.toast-success {
+  @apply bg-green-600;
+}
+
+.toast-error {
+  @apply bg-red-600;
+}
