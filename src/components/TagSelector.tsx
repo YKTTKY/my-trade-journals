@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { fetchTags, addTag } from '../services/supabase'
 import { useAuth } from '../context/AuthContext'
+import type { Tag } from '../types/supabase'
 
-// Tag categories with emojis
-const CATEGORY_EMOJIS = {
+const CATEGORY_EMOJIS: Record<string, string> = {
   asset: '📊',
   strategy: '🎯',
   'market-condition': '📈',
@@ -11,15 +11,21 @@ const CATEGORY_EMOJIS = {
   other: '🏷️',
 }
 
-const TagSelector = ({ selectedTags, onTagsChange }) => {
-  const [tags, setTags] = useState([])
-  const [newTagName, setNewTagName] = useState('')
-  const [newTagCategory, setNewTagCategory] = useState('other')
-  const [loading, setLoading] = useState(false)
-  const { user } = useAuth()
+type Props = {
+  selectedTags: Tag[]
+  onTagsChange: (tags: Tag[]) => void
+}
+
+const TagSelector: React.FC<Props> = ({ selectedTags, onTagsChange }) => {
+  const [tags, setTags] = useState<Tag[]>([])
+  const [newTagName, setNewTagName] = useState<string>('')
+  const [newTagCategory, setNewTagCategory] = useState<string>('other')
+  const [loading, setLoading] = useState<boolean>(false)
+  const { user } = (useAuth() as any) || {}
 
   useEffect(() => {
     loadTags()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadTags = async () => {
@@ -32,7 +38,7 @@ const TagSelector = ({ selectedTags, onTagsChange }) => {
     }
   }
 
-  const handleAddTag = async (e) => {
+  const handleAddTag = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
 
     if (!newTagName.trim()) return
@@ -48,7 +54,7 @@ const TagSelector = ({ selectedTags, onTagsChange }) => {
         name: newTagName,
         category: newTagCategory,
         emoji: CATEGORY_EMOJIS[newTagCategory] || '🏷️',
-        user_id: user.id
+        user_id: user.id,
       })
 
       if (error) throw error
@@ -62,7 +68,7 @@ const TagSelector = ({ selectedTags, onTagsChange }) => {
     }
   }
 
-  const toggleTag = (tag) => {
+  const toggleTag = (tag: Tag) => {
     const isSelected = selectedTags.some(t => t.id === tag.id)
 
     if (isSelected) {
@@ -72,19 +78,16 @@ const TagSelector = ({ selectedTags, onTagsChange }) => {
     }
   }
 
-  const groupedTags = tags.reduce((acc, tag) => {
-    if (!acc[tag.category]) {
-      acc[tag.category] = []
-    }
-    acc[tag.category].push(tag)
+  const groupedTags = tags.reduce<Record<string, Tag[]>>((acc, tag) => {
+    const key = tag.category || 'other'
+    if (!acc[key]) acc[key] = []
+    acc[key].push(tag)
     return acc
   }, {})
 
   return (
     <div className="space-y-4">
-      <label className="block text-sm font-medium text-gray-300">
-        Tags
-      </label>
+      <label className="block text-sm font-medium text-gray-300">Tags</label>
 
       {Object.entries(groupedTags).map(([category, categoryTags]) => (
         <div key={category}>
@@ -100,9 +103,7 @@ const TagSelector = ({ selectedTags, onTagsChange }) => {
                   key={tag.id}
                   onClick={() => toggleTag(tag)}
                   className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
-                    isSelected
-                      ? 'bg-primary-btn text-white'
-                      : 'bg-dark-bg text-gray-300 hover:bg-dark-border'
+                    isSelected ? 'bg-primary-btn text-white' : 'bg-dark-bg text-gray-300 hover:bg-dark-border'
                   }`}
                   type="button"
                 >
@@ -138,11 +139,7 @@ const TagSelector = ({ selectedTags, onTagsChange }) => {
           <option value="other">Other</option>
         </select>
 
-        <button
-          type="submit"
-          className="btn-primary px-4"
-          disabled={loading || !newTagName.trim()}
-        >
+        <button type="submit" className="btn-primary px-4" disabled={loading || !newTagName.trim()}>
           Add
         </button>
       </form>

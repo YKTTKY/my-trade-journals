@@ -1,15 +1,23 @@
-import { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { calculatePnL, calculatePnLPercentage, calculateRiskReward } from '../utils/calculations'
 import { getDateTimeForInput, formatDateTimeLocal } from '../utils/timezone'
 import TagSelector from './TagSelector'
 import toast from 'react-hot-toast'
+import type { Trade, TradeTagWithTag, Tag } from '../types/supabase'
 
-const TradeForm = ({ initialData = {}, onSubmit, loading, submitText = 'Save Trade' }) => {
+interface TradeFormProps {
+  initialData?: Partial<Trade> & { tags?: TradeTagWithTag[] }
+  onSubmit: (tradeData: Partial<Trade>, tagIds?: number[]) => Promise<void>
+  loading?: boolean
+  submitText?: string
+}
+
+const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loading, submitText = 'Save Trade' }) => {
   const navigate = useNavigate()
 
   // Extract tags from initial data (if editing)
-  const initialTags = initialData.tags?.map(({ tag }) => ({
+  const initialTags: Tag[] = initialData.tags?.map(({ tag }) => ({
     id: tag.id,
     name: tag.name,
     category: tag.category,
@@ -21,7 +29,7 @@ const TradeForm = ({ initialData = {}, onSubmit, loading, submitText = 'Save Tra
     ? { ...initialData, trade_date: formatDateTimeLocal(initialData.trade_date) }
     : initialData
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<any>({
     asset_type: 'stocks',
     position_direction: 'long',
     asset_symbol: '',
@@ -37,10 +45,10 @@ const TradeForm = ({ initialData = {}, onSubmit, loading, submitText = 'Save Tra
     ...formattedInitialData,
   })
 
-  const [calculatedPnL, setCalculatedPnL] = useState(initialData.pnl || 0)
-  const [calculatedPnLPercentage, setCalculatedPnLPercentage] = useState(initialData.pnl_percentage || 0)
-  const [calculatedRR, setCalculatedRR] = useState(0)
-  const [selectedTags, setSelectedTags] = useState(initialTags)
+  const [calculatedPnL, setCalculatedPnL] = useState<number>(initialData.pnl || 0)
+  const [calculatedPnLPercentage, setCalculatedPnLPercentage] = useState<number>(initialData.pnl_percentage || 0)
+  const [calculatedRR, setCalculatedRR] = useState<number>(0)
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(initialTags)
 
   useEffect(() => {
     const pnl = calculatePnL(
@@ -68,20 +76,18 @@ const TradeForm = ({ initialData = {}, onSubmit, loading, submitText = 'Save Tra
     setCalculatedRR(rr)
   }, [formData.entry_price, formData.exit_price, formData.position_size, formData.point_value, formData.position_direction, formData.fees, formData.stop_loss, formData.take_profit])
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({
+    setFormData((prev: any) => ({
       ...prev,
       [name]: value
     }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Explicitly define only the valid fields for the trades table
-    // Exclude virtual fields like 'tags' that come from relationship queries
-    const tradeData = {
+    const tradeData: Partial<Trade> = {
       asset_type: formData.asset_type,
       position_direction: formData.position_direction,
       asset_symbol: formData.asset_symbol,
@@ -98,13 +104,12 @@ const TradeForm = ({ initialData = {}, onSubmit, loading, submitText = 'Save Tra
       notes: formData.notes,
     }
 
-    // Include selected tags - the parent component will handle saving them
-    const tagIds = selectedTags.map(tag => tag.id)
+    const tagIds = selectedTags.map(tag => tag.id as number)
 
     try {
       await onSubmit(tradeData, tagIds)
-    } catch (error) {
-      toast.error('Error saving trade: ' + error.message)
+    } catch (error: any) {
+      toast.error('Error saving trade: ' + (error?.message || String(error)))
     }
   }
 

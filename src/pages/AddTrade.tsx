@@ -1,26 +1,26 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TradeForm from '../components/TradeForm'
 import { addTrade, assignTagsToTrade } from '../services/supabase'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { parseHKInputToUTC } from '../utils/timezone'
+import type { Trade } from '../types/supabase'
 
-const AddTrade = () => {
+const AddTrade: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const handleSubmit = async (tradeData, tagIds = []) => {
+  const handleSubmit = async (tradeData: Partial<Trade>, tagIds: number[] = []) => {
     setLoading(true)
 
     try {
-      // Convert trade_date (which is from a datetime-local input representing HKT)
-      // to a UTC ISO string for storage.
-      const tradePayload = {
+      // Convert trade_date (HKT) to UTC ISO before storing
+      const tradePayload: Partial<Trade> = {
         ...tradeData,
         user_id: user.id,
-        trade_date: tradeData.trade_date ? parseHKInputToUTC(tradeData.trade_date) : null,
+        trade_date: tradeData.trade_date ? parseHKInputToUTC(String(tradeData.trade_date)) : null,
       }
 
       // Create the trade
@@ -30,7 +30,7 @@ const AddTrade = () => {
 
       // If tags were selected, assign them to the trade
       if (tagIds.length > 0 && trade) {
-        const { error: tagsError } = await assignTagsToTrade(trade.id, tagIds)
+        const { error: tagsError } = await assignTagsToTrade(trade.id as number, tagIds)
         if (tagsError) {
           console.error('Error assigning tags:', tagsError)
           // Don't fail the whole operation if tags fail
@@ -39,8 +39,8 @@ const AddTrade = () => {
 
       toast.success('Trade added successfully!')
       navigate('/trades')
-    } catch (error) {
-      toast.error('Error adding trade: ' + error.message)
+    } catch (error: any) {
+      toast.error('Error adding trade: ' + (error?.message || String(error)))
     } finally {
       setLoading(false)
     }

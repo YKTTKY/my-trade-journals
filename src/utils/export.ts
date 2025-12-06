@@ -13,7 +13,7 @@ import {
   calculateMaxDrawdown
 } from './calculations'
 
-export const exportToCSV = (data, filename) => {
+export const exportToCSV = (data: any[], filename: string) => {
   const csv = Papa.unparse(data)
   const blob = new Blob([csv], { type: 'text/csv' })
   const url = window.URL.createObjectURL(blob)
@@ -24,7 +24,7 @@ export const exportToCSV = (data, filename) => {
   window.URL.revokeObjectURL(url)
 }
 
-export const exportToPDF = (trades, stats, filename) => {
+export const exportToPDF = (trades: any[], stats: any, filename: string) => {
   const doc = new jsPDF()
 
   // Title
@@ -61,7 +61,7 @@ export const exportToPDF = (trades, stats, filename) => {
   })
 
   // Trades table
-  const lastY = doc.lastAutoTable?.finalY || 50
+  const lastY = (doc as any).lastAutoTable?.finalY || 50
   doc.setFontSize(16)
   doc.text('Trade Details', 14, lastY + 15)
 
@@ -81,14 +81,14 @@ export const exportToPDF = (trades, stats, filename) => {
     theme: 'grid',
     headStyles: { fillColor: [59, 130, 246] },
     columnStyles: {
-      5: { fontStyle: 'bold', textColor: trades.map(t => t.pnl >= 0 ? [34, 197, 94] : [239, 68, 68]) }
+      5: { fontStyle: 'bold', textColor: trades.map((t: any) => t.pnl >= 0 ? [34, 197, 94] : [239, 68, 68]) }
     }
   })
 
   doc.save(filename)
 }
 
-export const exportTradeList = (trades) => {
+export const exportTradeList = (trades: any[]) => {
   const exportData = trades.map(trade => ({
     'Trade Date': new Date(trade.trade_date).toLocaleDateString(),
     'Trade Time': new Date(trade.trade_date).toLocaleTimeString(),
@@ -108,7 +108,7 @@ export const exportTradeList = (trades) => {
   exportToCSV(exportData, `trades-export-${new Date().toISOString().split('T')[0]}.csv`)
 }
 
-export const exportAnalyticsReport = (trades, stats) => {
+export const exportAnalyticsReport = (trades: any[], stats: any) => {
   const reportData = {
     summary: {
       totalTrades: stats.totalTrades,

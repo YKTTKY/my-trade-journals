@@ -1,24 +1,25 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchTrades, deleteTrade } from '../services/supabase'
 import { useAuth } from '../context/AuthContext'
-import { calculateTotalPnL, calculateWinRate, calculateTotalPnLPercentage } from '../utils/calculations'
+import { calculateTotalPnL, calculateWinRate } from '../utils/calculations'
 import toast from 'react-hot-toast'
 
-const Trades = () => {
-  const [trades, setTrades] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [filters, setFilters] = useState({
+const Trades: React.FC = () => {
+  const [trades, setTrades] = useState<any[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [filters, setFilters] = useState<any>({
     assetType: '',
     startDate: '',
     endDate: '',
     sortBy: 'trade_date',
     sortOrder: 'desc'
   })
-  const { user } = useAuth()
+  const { user } = (useAuth() as any) || {}
 
   useEffect(() => {
     loadTrades()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters])
 
   const loadTrades = async () => {
@@ -27,14 +28,13 @@ const Trades = () => {
       const { data, error } = await fetchTrades(user.id, filters)
       if (error) throw error
 
-      // Apply sorting on client side
       const sorted = [...(data || [])].sort((a, b) => {
         const aVal = a[filters.sortBy]
         const bVal = b[filters.sortBy]
         const order = filters.sortOrder === 'desc' ? -1 : 1
 
         if (filters.sortBy === 'trade_date') {
-          return order * (new Date(bVal) - new Date(aVal))
+          return order * (new Date(bVal).getTime() - new Date(aVal).getTime())
         }
 
         if (typeof aVal === 'string') {
@@ -45,14 +45,14 @@ const Trades = () => {
       })
 
       setTrades(sorted)
-    } catch (error) {
-      toast.error('Error loading trades: ' + error.message)
+    } catch (error: any) {
+      toast.error('Error loading trades: ' + (error.message || String(error)))
     } finally {
       setLoading(false)
     }
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     if (!window.confirm('Are you sure you want to delete this trade?')) return
 
     try {
@@ -61,17 +61,14 @@ const Trades = () => {
 
       toast.success('Trade deleted successfully')
       loadTrades()
-    } catch (error) {
-      toast.error('Error deleting trade: ' + error.message)
+    } catch (error: any) {
+      toast.error('Error deleting trade: ' + (error.message || String(error)))
     }
   }
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    setFilters(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    setFilters((prev: any) => ({ ...prev, [name]: value }))
   }
 
   const winRate = calculateWinRate(trades)
@@ -81,12 +78,9 @@ const Trades = () => {
     <div className="max-w-7xl mx-auto fade-in">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-white mb-2">Your Trades</h1>
-        <p className="text-gray-400">
-          View and manage all your trading activity in one place.
-        </p>
+        <p className="text-gray-400">View and manage all your trading activity in one place.</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="card">
           <h3 className="text-sm font-medium text-gray-400 mb-1">Total Trades</h3>
@@ -100,27 +94,16 @@ const Trades = () => {
 
         <div className="card">
           <h3 className="text-sm font-medium text-gray-400 mb-1">Total P&L</h3>
-          <p className={`text-3xl font-bold ${totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>
-            {totalPnL >= 0 ? '+' : ''}{totalPnL.toFixed(2)}
-          </p>
+          <p className={`text-3xl font-bold ${totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>{totalPnL >= 0 ? '+' : ''}{totalPnL.toFixed(2)}</p>
         </div>
       </div>
 
-      {/* Filters */}
       <div className="card mb-6">
         <h3 className="text-lg font-semibold text-white mb-4">Filters</h3>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
-            <label htmlFor="assetType" className="block text-sm font-medium text-gray-300 mb-2">
-              Asset Type
-            </label>
-            <select
-              id="assetType"
-              name="assetType"
-              value={filters.assetType}
-              onChange={handleFilterChange}
-              className="input-field"
-            >
+            <label htmlFor="assetType" className="block text-sm font-medium text-gray-300 mb-2">Asset Type</label>
+            <select id="assetType" name="assetType" value={filters.assetType} onChange={handleFilterChange} className="input-field">
               <option value="">All Types</option>
               <option value="stocks">Stocks</option>
               <option value="forex">Forex</option>
@@ -132,44 +115,18 @@ const Trades = () => {
           </div>
 
           <div>
-            <label htmlFor="startDate" className="block text-sm font-medium text-gray-300 mb-2">
-              From Date
-            </label>
-            <input
-              id="startDate"
-              name="startDate"
-              type="date"
-              value={filters.startDate}
-              onChange={handleFilterChange}
-              className="input-field"
-            />
+            <label htmlFor="startDate" className="block text-sm font-medium text-gray-300 mb-2">From Date</label>
+            <input id="startDate" name="startDate" type="date" value={filters.startDate} onChange={handleFilterChange} className="input-field" />
           </div>
 
           <div>
-            <label htmlFor="endDate" className="block text-sm font-medium text-gray-300 mb-2">
-              To Date
-            </label>
-            <input
-              id="endDate"
-              name="endDate"
-              type="date"
-              value={filters.endDate}
-              onChange={handleFilterChange}
-              className="input-field"
-            />
+            <label htmlFor="endDate" className="block text-sm font-medium text-gray-300 mb-2">To Date</label>
+            <input id="endDate" name="endDate" type="date" value={filters.endDate} onChange={handleFilterChange} className="input-field" />
           </div>
 
           <div>
-            <label htmlFor="sortBy" className="block text-sm font-medium text-gray-300 mb-2">
-              Sort By
-            </label>
-            <select
-              id="sortBy"
-              name="sortBy"
-              value={filters.sortBy}
-              onChange={handleFilterChange}
-              className="input-field"
-            >
+            <label htmlFor="sortBy" className="block text-sm font-medium text-gray-300 mb-2">Sort By</label>
+            <select id="sortBy" name="sortBy" value={filters.sortBy} onChange={handleFilterChange} className="input-field">
               <option value="trade_date">Date</option>
               <option value="asset_symbol">Symbol</option>
               <option value="pnl">P&L</option>
@@ -178,16 +135,8 @@ const Trades = () => {
           </div>
 
           <div>
-            <label htmlFor="sortOrder" className="block text-sm font-medium text-gray-300 mb-2">
-              Order
-            </label>
-            <select
-              id="sortOrder"
-              name="sortOrder"
-              value={filters.sortOrder}
-              onChange={handleFilterChange}
-              className="input-field"
-            >
+            <label htmlFor="sortOrder" className="block text-sm font-medium text-gray-300 mb-2">Order</label>
+            <select id="sortOrder" name="sortOrder" value={filters.sortOrder} onChange={handleFilterChange} className="input-field">
               <option value="desc">Descending</option>
               <option value="asc">Ascending</option>
             </select>
@@ -195,13 +144,10 @@ const Trades = () => {
         </div>
       </div>
 
-      {/* Trades Table */}
       <div className="card">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-white">All Trades</h3>
-          <Link to="/trades/add" className="btn-primary">
-            Add New Trade
-          </Link>
+          <Link to="/trades/add" className="btn-primary">Add New Trade</Link>
         </div>
 
         {loading ? (
@@ -231,13 +177,11 @@ const Trades = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-dark-border">
-                {trades.map((trade) => ( 
+                {trades.map((trade) => (
                   <tr key={trade.id} className="table-row">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                       {new Date(trade.trade_date).toLocaleDateString()}<br />
-                      <span className="text-xs text-gray-500">
-                        {new Date(trade.trade_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                      <span className="text-xs text-gray-500">{new Date(trade.trade_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
@@ -246,52 +190,23 @@ const Trades = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span className={`font-medium ${trade.position_direction === 'short' ? 'text-red-400' : 'text-green-400'}`}>
-                        {trade.position_direction === 'short' ? '📉' : '📈'}
-                      </span>
+                      <span className={`font-medium ${trade.position_direction === 'short' ? 'text-red-400' : 'text-green-400'}`}>{trade.position_direction === 'short' ? '📉' : '📈'}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                      ${trade.entry_price?.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                      ${trade.exit_price?.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                      {trade.position_size}
-                    </td>
-                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${
-                      trade.pnl >= 0 ? 'text-profit' : 'text-loss'
-                    }`}>
-                      {trade.pnl >= 0 ? '+' : ''}{trade.pnl?.toFixed(2)}
-                    </td>
-                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${
-                      trade.pnl_percentage >= 0 ? 'text-profit' : 'text-loss'
-                    }`}>
-                      {trade.pnl_percentage >= 0 ? '+' : ''}{trade.pnl_percentage?.toFixed(2)}%
-                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${trade.entry_price?.toFixed(2)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${trade.exit_price?.toFixed(2)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{trade.position_size}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${trade.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>{trade.pnl >= 0 ? '+' : ''}{trade.pnl?.toFixed(2)}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${trade.pnl_percentage >= 0 ? 'text-profit' : 'text-loss'}`}>{trade.pnl_percentage >= 0 ? '+' : ''}{trade.pnl_percentage?.toFixed(2)}%</td>
                     <td className="px-6 py-4 whitespace-wrap text-sm">
                       <div className="flex flex-wrap gap-1">
-                        {trade.tags?.map(({ tag }) => (
-                          <span key={tag.id} className="tag-chip">
-                            <span className="mr-1">{tag.emoji || '🏷️'}</span>
-                            {tag.name}
-                          </span>
+                        {trade.tags?.map(({ tag }: any) => (
+                          <span key={tag.id} className="tag-chip"><span className="mr-1">{tag.emoji || '🏷️'}</span>{tag.name}</span>
                         )) || 'No tags'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                      <Link
-                        to={`/trades/edit/${trade.id}`}
-                        className="text-primary-btn hover:text-blue-400"
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(trade.id)}
-                        className="text-red-400 hover:text-red-300"
-                      >
-                        Delete
-                      </button>
+                      <Link to={`/trades/edit/${trade.id}`} className="text-primary-btn hover:text-blue-400">Edit</Link>
+                      <button onClick={() => handleDelete(trade.id)} className="text-red-400 hover:text-red-300">Delete</button>
                     </td>
                   </tr>
                 ))}

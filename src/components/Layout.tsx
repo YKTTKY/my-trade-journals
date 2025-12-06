@@ -1,17 +1,23 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import toast from 'react-hot-toast'
 
-const Layout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { logout } = useAuth()
-  const { theme, toggleTheme } = useTheme()
+type NavItem = {
+  name: string
+  href: string
+  icon: string
+}
+
+const Layout: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
+  const { logout } = (useAuth() as any) || {}
+  const { theme, toggleTheme } = (useTheme() as any) || {}
   const location = useLocation()
   const navigate = useNavigate()
 
-  const navigation = [
+  const navigation: NavItem[] = [
     { name: 'Dashboard', href: '/dashboard', icon: '📊' },
     { name: 'Trades', href: '/trades', icon: '📈' },
     { name: 'Add Trade', href: '/trades/add', icon: '➕' },
@@ -32,7 +38,7 @@ const Layout = () => {
     }
   }
 
-  const isActive = (path) => location.pathname === path
+  const isActive = (path: string) => location.pathname === path
 
   return (
     <div className="min-h-screen bg-dark-bg">

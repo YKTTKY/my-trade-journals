@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import TradeForm from '../components/TradeForm'
 import { fetchTrades, updateTrade } from '../services/supabase'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { parseHKInputToUTC } from '../utils/timezone'
+import type { TradeWithTags } from '../types/supabase'
 
-const EditTrade = () => {
+const EditTrade: React.FC = () => {
   const { id } = useParams()
-  const [trade, setTrade] = useState(null)
+  const [trade, setTrade] = useState<TradeWithTags | null>(null)
   const [loading, setLoading] = useState(false)
   const [fetchLoading, setFetchLoading] = useState(true)
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user } = (useAuth() as any) || {}
 
   useEffect(() => {
     const loadTrade = async () => {
@@ -20,7 +21,7 @@ const EditTrade = () => {
         const { data, error } = await fetchTrades(user.id)
         if (error) throw error
 
-        const tradeToEdit = data.find(t => t.id === parseInt(id))
+        const tradeToEdit = data.find((t: any) => t.id === parseInt(id || '0'))
         if (!tradeToEdit) {
           toast.error('Trade not found')
           navigate('/trades')
@@ -28,8 +29,8 @@ const EditTrade = () => {
         }
 
         setTrade(tradeToEdit)
-      } catch (error) {
-        toast.error('Error loading trade: ' + error.message)
+      } catch (error: any) {
+        toast.error('Error loading trade: ' + (error.message || String(error)))
       } finally {
         setFetchLoading(false)
       }
@@ -38,13 +39,11 @@ const EditTrade = () => {
     loadTrade()
   }, [id, user.id, navigate])
 
-  const handleSubmit = async (tradeData, tagIds = []) => {
+  const handleSubmit = async (tradeData: any, tagIds: number[] = []) => {
     setLoading(true)
 
     try {
-      const tradeId = parseInt(id)
-      // Update the trade (tags are not updated in edit mode for simplicity)
-      // Ensure trade_date is converted from HKT input to UTC ISO before updating
+      const tradeId = parseInt(id || '0')
       const payload = {
         ...tradeData,
         trade_date: tradeData.trade_date ? parseHKInputToUTC(tradeData.trade_date) : null,
@@ -58,7 +57,7 @@ const EditTrade = () => {
 
       toast.success('Trade updated successfully!')
       navigate('/trades')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error in handleSubmit:', error)
       toast.error('Error updating trade: ' + (error.message || 'Unknown error'))
     } finally {
@@ -80,18 +79,11 @@ const EditTrade = () => {
     <div className="max-w-6xl mx-auto fade-in">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-white mb-2">Edit Trade</h1>
-        <p className="text-gray-400">
-          Update your trade information below.
-        </p>
+        <p className="text-gray-400">Update your trade information below.</p>
       </div>
 
       <div className="card">
-        <TradeForm
-          initialData={trade}
-          onSubmit={handleSubmit}
-          loading={loading}
-          submitText="Update Trade"
-        />
+        <TradeForm initialData={trade} onSubmit={handleSubmit} loading={loading} submitText="Update Trade" />
       </div>
     </div>
   )
