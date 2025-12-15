@@ -67,7 +67,7 @@ const Templates: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-btn"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     )
   }
@@ -76,27 +76,27 @@ const Templates: React.FC = () => {
     <div className="space-y-6 fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white mb-2">Templates</h1>
-          <p className="text-gray-400">Create and manage trading plan templates and checklists.</p>
+          <h1 className="text-2xl font-bold text-base-content mb-2">Templates</h1>
+          <p className="text-base-content/70">Create and manage trading plan templates and checklists.</p>
         </div>
 
-        <button onClick={() => setShowCreateForm(!showCreateForm)} className="btn-primary">
+        <button onClick={() => setShowCreateForm(!showCreateForm)} className="btn btn-primary">
           {showCreateForm ? 'Cancel' : 'Create Template'}
         </button>
       </div>
 
       {showCreateForm && (
         <div className="card">
-          <h3 className="text-lg font-semibold text-white mb-4">Create New Template</h3>
+          <h3 className="text-lg font-semibold text-base-content mb-4">Create New Template</h3>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Template Name</label>
-              <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="input-field" placeholder="e.g., Morning Trading Plan" required />
+              <label className="block text-sm font-medium text-base-content mb-2">Template Name</label>
+              <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="input input-bordered w-full" placeholder="e.g., Morning Trading Plan" required />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Template Type</label>
-              <select value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value })} className="input-field" required>
+              <label className="block text-sm font-medium text-base-content mb-2">Template Type</label>
+              <select value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value })} className="select select-bordered w-full" required>
                 <option value="trading_plan">Trading Plan</option>
                 <option value="checklist">Pre-trade Checklist</option>
                 <option value="session_recap">Session Recap</option>
@@ -106,13 +106,13 @@ const Templates: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Template Content</label>
-              <textarea value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className="input-field" rows={10} placeholder={`Enter your template content here...`} required />
+              <label className="block text-sm font-medium text-base-content mb-2">Template Content</label>
+              <textarea value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className="textarea textarea-bordered w-full" rows={10} placeholder={`Enter your template content here...`} required />
             </div>
 
             <div className="flex gap-4">
-              <button type="submit" className="btn-primary">Create Template</button>
-              <button type="button" onClick={() => setShowCreateForm(false)} className="btn-secondary">Cancel</button>
+              <button type="submit" className="btn btn-primary">Create Template</button>
+              <button type="button" onClick={() => setShowCreateForm(false)} className="btn btn-secondary">Cancel</button>
             </div>
           </form>
         </div>
@@ -121,9 +121,9 @@ const Templates: React.FC = () => {
       {templates.length === 0 ? (
         <div className="card">
           <div className="text-center py-12">
-            <div className="text-gray-400 text-lg mb-2">No templates yet</div>
-            <p className="text-gray-500">Create templates for your trading plans and checklists.</p>
-            <button onClick={() => setShowCreateForm(true)} className="btn-primary mt-4">Create Your First Template</button>
+            <div className="text-base-content/70 text-lg mb-2">No templates yet</div>
+            <p className="text-base-content/60">Create templates for your trading plans and checklists.</p>
+            <button onClick={() => setShowCreateForm(true)} className="btn btn-primary mt-4">Create Your First Template</button>
           </div>
         </div>
       ) : (
@@ -131,13 +131,13 @@ const Templates: React.FC = () => {
           {templates.map((template) => (
             <div key={template.id} className="card">
               <div className="flex items-start justify-between mb-3">
-                <h3 className="text-lg font-semibold text-white">{template.name}</h3>
-                <span className="text-xs bg-dark-border text-gray-400 px-2 py-1 rounded">{template.type.replace('_', ' ')}</span>
+                <h3 className="text-lg font-semibold text-base-content">{template.name}</h3>
+                <span className="text-xs bg-base-300 text-base-content/70 px-2 py-1 rounded">{template.type.replace('_', ' ')}</span>
               </div>
-              <div className="text-sm text-gray-400 line-clamp-3 mb-4">{template.content.slice(0, 120)}{template.content.length > 120 ? '...' : ''}</div>
-              <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="text-sm text-base-content/70 line-clamp-3 mb-4">{template.content.slice(0, 120)}{template.content.length > 120 ? '...' : ''}</div>
+              <div className="flex items-center justify-between text-xs text-base-content/60">
                 <span>Created: {new Date(template.created_at).toLocaleDateString()}</span>
-                <button onClick={() => handleDelete(template.id)} className="text-red-400 hover:text-red-300">Delete</button>
+                <button onClick={() => handleDelete(template.id)} className="text-error hover:text-error-focus">Delete</button>
               </div>
             </div>
           ))}

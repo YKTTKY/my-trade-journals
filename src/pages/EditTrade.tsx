@@ -68,7 +68,7 @@ const EditTrade: React.FC = () => {
   if (fetchLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-btn"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     )
   }
@@ -78,8 +78,8 @@ const EditTrade: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto fade-in">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white mb-2">Edit Trade</h1>
-        <p className="text-gray-400">Update your trade information below.</p>
+        <h1 className="text-2xl font-bold text-base-content mb-2">Edit Trade</h1>
+        <p className="text-base-content/70">Update your trade information below.</p>
       </div>
 
       <div className="card">

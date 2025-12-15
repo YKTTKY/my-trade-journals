@@ -7,14 +7,6 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
-      colors: {
-        'dark-bg': '#1A1A1A',
-        'dark-card': '#2A2A2A',
-        'dark-border': '#404040',
-        'profit': '#22C55E',
-        'loss': '#EF4444',
-        'primary-btn': '#3B82F6',
-      },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
       },
@@ -34,5 +26,59 @@ export default {
       }
     },
   },
-  plugins: [],
+  plugins: [require('daisyui')],
+  daisyui: {
+    // Register custom themes so daisyUI injects their CSS variables at build time.
+    themes: [
+      {
+        abyss: {
+          'primary': 'oklch(92% 0.2653 125)',
+          'primary-content': 'oklch(50% 0.2653 125)',
+          'secondary': 'oklch(83.27% 0.0764 298.3)',
+          'secondary-content': 'oklch(43.27% 0.0764 298.3)',
+          'accent': 'oklch(43% 0 0)',
+          'accent-content': 'oklch(98% 0 0)',
+          'neutral': 'oklch(30% 0.08 209)',
+          'neutral-content': 'oklch(90% 0.076 70.697)',
+          'base-100': 'oklch(20% 0.08 209)',
+          'base-200': 'oklch(15% 0.08 209)',
+          'base-300': 'oklch(10% 0.08 209)',
+          'base-content': 'oklch(90% 0.076 70.697)',
+          'info': 'oklch(74% 0.16 232.661)',
+          'info-content': 'oklch(29% 0.066 243.157)',
+          'success': 'oklch(79% 0.209 151.711)',
+          'success-content': 'oklch(26% 0.065 152.934)',
+          'warning': 'oklch(84.8% 0.1962 84.62)',
+          'warning-content': 'oklch(44.8% 0.1962 84.62)',
+          'error': 'oklch(65% 0.1985 24.22)',
+          'error-content': 'oklch(27% 0.1985 24.22)'
+        }
+      },
+      {
+        lemonade: {
+          'primary': 'oklch(58.92% 0.199 134.6)',
+          'primary-content': 'oklch(11.784% 0.039 134.6)',
+          'secondary': 'oklch(77.75% 0.196 111.09)',
+          'secondary-content': 'oklch(15.55% 0.039 111.09)',
+          'accent': 'oklch(85.39% 0.201 100.73)',
+          'accent-content': 'oklch(17.078% 0.04 100.73)',
+          'neutral': 'oklch(30.98% 0.075 108.6)',
+          'neutral-content': 'oklch(86.196% 0.015 108.6)',
+          'base-100': 'oklch(98.71% 0.02 123.72)',
+          'base-200': 'oklch(91.8% 0.018 123.72)',
+          'base-300': 'oklch(84.89% 0.017 123.72)',
+          'base-content': 'oklch(19.742% 0.004 123.72)',
+          'info': 'oklch(86.19% 0.047 224.14)',
+          'info-content': 'oklch(17.238% 0.009 224.14)',
+          'success': 'oklch(86.19% 0.047 157.85)',
+          'success-content': 'oklch(17.238% 0.009 157.85)',
+          'warning': 'oklch(86.19% 0.047 102.15)',
+          'warning-content': 'oklch(17.238% 0.009 102.15)',
+          'error': 'oklch(86.19% 0.047 25.85)',
+          'error-content': 'oklch(17.238% 0.009 25.85)'
+        }
+      }
+    ],
+    darkMode: 'class'
+  }
 }

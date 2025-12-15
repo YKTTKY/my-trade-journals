@@ -3,54 +3,67 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    /* use app-level variables first (set in App.css via data-theme),
+       then fall back to daisyUI variables if present, then to safe colors */
+    background-color: var(--app-bg, var(--base-100, hsl(var(--b1) / var(--tw-bg-opacity, 1))));
+    color: var(--app-text, var(--base-content, hsl(var(--bc) / var(--tw-text-opacity, 1))));
+  }
+
   body {
     @apply font-sans;
+    background-color: var(--app-bg, var(--base-100, hsl(var(--b1) / var(--tw-bg-opacity, 1))));
+    color: var(--app-text, var(--base-content, hsl(var(--bc) / var(--tw-text-opacity, 1))));
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-primary-btn hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
-  }
-
-  .btn-secondary {
-    @apply bg-dark-card hover:bg-dark-border text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
-  }
-
-  .btn-success {
-    @apply bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
-  }
-
-  .btn-danger {
-    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
-  }
-
-  .input-field {
-    @apply w-full px-4 py-2 bg-dark-card border border-dark-border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-btn transition-colors duration-200;
-  }
-
+  /* Custom utility classes using only core Tailwind utilities */
+  
   .card {
-    @apply bg-dark-card border border-dark-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200;
+    @apply rounded-lg p-6 shadow-sm transition-all duration-200;
+    background-color: hsl(var(--b2) / var(--tw-bg-opacity, 1));
+    border: 1px solid hsl(var(--b3) / var(--tw-border-opacity, 1));
+    border-radius: 0.75rem;
+    border: 1px solid transparent;
+    /* Layer 1: element background (uses app-level or daisyUI vars)
+       Layer 2: gradient used for the border */
+    background-image: linear-gradient(var(--app-bg, var(--base-100, hsl(var(--b1) / var(--tw-bg-opacity, 1)))), var(--app-bg, var(--base-100, hsl(var(--b1) / var(--tw-bg-opacity, 1))))),
+                      linear-gradient(90deg, var(--app-primary, var(--primary, #3b82f6)), var(--app-primary-content, var(--primary-content, #60a5fa)));
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
+
+  }
+
+  .card:hover {
+    @apply shadow-md;
+    box-shadow: 
+    0 0 8px 2px var(--app-primary, var(--primary, #3b82f6)),
+    0 0 16px 4px var(--app-primary-content, var(--primary-content, #60a5fa));
+  }
+
+  /* Gradient border utility: uses double background layers so the
+     outer layer becomes the border gradient while the inner layer is
+     the element's background. Works well with rounded corners. */
+  
+
+  /* Small variant for tighter corners */
+  .gradient-border-sm {
+    border-radius: 0.5rem;
   }
 
   .table-header {
-    @apply bg-dark-bg text-gray-300 uppercase text-xs font-medium tracking-wider;
+    @apply uppercase text-xs font-medium tracking-wider;
+    background-color: hsl(var(--b3) / var(--tw-bg-opacity, 1));
+    color: hsl(var(--bc) / var(--tw-text-opacity, 1));
   }
 
   .table-row {
-    @apply hover:bg-dark-bg transition-colors duration-150;
+    @apply transition-colors duration-150;
   }
 
-  .tag-chip {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary-btn/20 text-primary-btn hover:bg-primary-btn/30 transition-colors duration-200;
-  }
-
-  .tag-chip.profit {
-    @apply bg-green-600/20 text-profit hover:bg-green-600/30;
-  }
-
-  .tag-chip.loss {
-    @apply bg-red-600/20 text-loss hover:bg-red-600/30;
+  .table-row:hover {
+    background-color: hsl(var(--b2) / var(--tw-bg-opacity, 1));
   }
 
   .fade-in {
@@ -62,11 +75,17 @@
   }
 
   .nav-link {
-    @apply flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-dark-bg transition-colors duration-200;
+    @apply flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200;
+    color: hsl(var(--bc) / var(--tw-text-opacity, 1));
+  }
+
+  .nav-link:hover {
+    color: hsl(var(--bc) / var(--tw-text-opacity, 1));
   }
 
   .nav-link.active {
-    @apply bg-primary-btn/20 text-primary-btn;
+    background-color: hsl(var(--p) / 0.2);
+    color: hsl(var(--p) / var(--tw-text-opacity, 1));
   }
 }
 
@@ -75,37 +94,54 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-dark-bg;
+  background-color: hsl(var(--b3) / var(--tw-bg-opacity, 1));
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-dark-border rounded;
+  @apply rounded;
+  background-color: hsl(var(--bc) / 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-500;
+  background-color: hsl(var(--bc) / 0.5);
 }
 
 .react-calendar {
-  @apply bg-dark-card border border-dark-border rounded-lg;
+  @apply rounded-lg border;
+  background-color: hsl(var(--b1) / var(--tw-bg-opacity, 1));
+  border-color: hsl(var(--b3) / var(--tw-border-opacity, 1));
 }
 
 .react-calendar__tile {
-  @apply text-white hover:bg-dark-bg rounded;
+  @apply rounded;
+  color: hsl(var(--bc) / var(--tw-text-opacity, 1));
+}
+
+.react-calendar__tile:hover {
+  background-color: hsl(var(--b2) / var(--tw-bg-opacity, 1));
 }
 
 .react-calendar__tile--active {
-  @apply bg-primary-btn;
+  background-color: hsl(var(--p) / var(--tw-bg-opacity, 1));
+  color: hsl(var(--pc) / var(--tw-text-opacity, 1));
 }
 
 .react-calendar__navigation button {
-  @apply text-white hover:bg-dark-bg;
+  color: hsl(var(--bc) / var(--tw-text-opacity, 1));
+}
+
+.react-calendar__navigation button:hover {
+  background-color: hsl(var(--b2) / var(--tw-bg-opacity, 1));
 }
 
 .toast-success {
-  @apply bg-green-600;
+  background-color: hsl(var(--su) / var(--tw-bg-opacity, 1));
+  color: hsl(var(--su-content) / var(--tw-text-opacity, 1));
+  @apply rounded-lg p-4;
 }
 
 .toast-error {
-  @apply bg-red-600;
+  background-color: hsl(var(--er) / var(--tw-bg-opacity, 1));
+  color: hsl(var(--er-content) / var(--tw-text-opacity, 1));
+  @apply rounded-lg p-4;
 }

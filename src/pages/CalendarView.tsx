@@ -87,7 +87,7 @@ const CalendarView: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-btn"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     )
   }
@@ -95,14 +95,14 @@ const CalendarView: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto fade-in">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white mb-2">Calendar View</h1>
-        <p className="text-gray-400">Visualize your trading profitability by day, week, and month.</p>
+        <h1 className="text-2xl font-bold text-base-content mb-2">Calendar View</h1>
+        <p className="text-base-content/70">Visualize your trading profitability by day, week, and month.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <div className="card">
-            <h3 className="text-lg font-semibold text-white mb-4">{format(selectedDate, 'MMMM yyyy')}</h3>
+            <h3 className="text-lg font-semibold text-base-content mb-4">{format(selectedDate, 'MMMM yyyy')}</h3>
 
             <Calendar
               value={selectedDate}
@@ -121,7 +121,7 @@ const CalendarView: React.FC = () => {
 
                 return (
                   <div className="mt-1">
-                    <div className={`w-2 h-2 rounded-full mx-auto ${totalPnL > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                    <div className={`w-2 h-2 rounded-full mx-auto ${totalPnL > 0 ? 'bg-success' : 'bg-error'}`}></div>
                   </div>
                 )
               }}
@@ -133,17 +133,17 @@ const CalendarView: React.FC = () => {
           {/* Selected Date Details */}
           {selectedDate && selectedDateTrades.length > 0 && (
             <div className="card mt-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Trades for {format(selectedDate, 'MMMM d, yyyy')}</h3>
+              <h3 className="text-lg font-semibold text-base-content mb-4">Trades for {format(selectedDate, 'MMMM d, yyyy')}</h3>
               <div className="space-y-2">
                 {selectedDateTrades.map((trade) => (
-                  <div key={trade.id} className="flex items-center justify-between p-3 bg-dark-bg rounded">
+                  <div key={trade.id} className="flex items-center justify-between p-3 bg-base-300 rounded">
                     <div>
-                      <div className="text-white font-medium">{trade.asset_symbol}</div>
-                      <div className="text-sm text-gray-400">
+                      <div className="text-base-content font-medium">{trade.asset_symbol}</div>
+                      <div className="text-sm text-base-content/70">
                         {trade.asset_type} • {new Date(trade.trade_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
-                    <div className={`text-lg font-semibold ${trade.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                    <div className={`text-lg font-semibold ${trade.pnl >= 0 ? 'text-success' : 'text-error'}`}>
                       {trade.pnl >= 0 ? '+' : ''}{(trade.pnl || 0).toFixed(2)}
                     </div>
                   </div>
@@ -156,7 +156,7 @@ const CalendarView: React.FC = () => {
         <div className="space-y-6">
           {/* Month Summary etc. - kept similar to original for now */}
           <div className="card">
-            <h3 className="text-lg font-semibold text-white mb-4">{format(selectedDate, 'MMMM')} Summary</h3>
+            <h3 className="text-lg font-semibold text-base-content mb-4">{format(selectedDate, 'MMMM')} Summary</h3>
             {/* Summary content computed client-side */}
             {(() => {
               const monthTrades = trades.filter(t => {
@@ -172,20 +172,20 @@ const CalendarView: React.FC = () => {
               return (
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Total Trades</span>
-                    <span className="text-white font-medium">{total}</span>
+                    <span className="text-base-content/70">Total Trades</span>
+                    <span className="text-base-content font-medium">{total}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Wins</span>
-                    <span className="text-profit">{wins}</span>
+                    <span className="text-base-content/70">Wins</span>
+                    <span className="text-success">{wins}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Losses</span>
-                    <span className="text-loss">{losses}</span>
+                    <span className="text-base-content/70">Losses</span>
+                    <span className="text-error">{losses}</span>
                   </div>
-                  <div className="flex justify-between pt-2 border-t border-dark-border">
-                    <span className="text-gray-400">Total P&L</span>
-                    <span className={`font-bold ${pnl >= 0 ? 'text-profit' : 'text-loss'}`}>{pnl >= 0 ? '+' : ''}{pnl.toFixed(2)}</span>
+                  <div className="flex justify-between pt-2 border-t border-base-300">
+                    <span className="text-base-content/70">Total P&L</span>
+                    <span className={`font-bold ${pnl >= 0 ? 'text-success' : 'text-error'}`}>{pnl >= 0 ? '+' : ''}{pnl.toFixed(2)}</span>
                   </div>
                 </div>
               )

@@ -49,8 +49,8 @@ const AddTrade: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto fade-in">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white mb-2">Add New Trade</h1>
-        <p className="text-gray-400">
+        <h1 className="text-2xl font-bold text-base-content mb-2">Add New Trade</h1>
+        <p className="text-base-content/70">
           Log your trading activity with detailed information for better analysis.
         </p>
       </div>

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
 type ThemeContextValue = {
-  theme: string
+  theme: 'abyss' | 'lemonade'
   toggleTheme: () => void
   isDark: boolean
 }
@@ -12,32 +12,38 @@ export const useTheme = () => {
   const ctx = useContext(ThemeContext)
   if (!ctx) {
     // Fallback for incremental migration
-    return { theme: 'dark', toggleTheme: () => {}, isDark: true }
+    return { theme: 'abyss' as const, toggleTheme: () => {}, isDark: true }
   }
   return ctx
 }
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<string>(() => {
-    const saved = typeof window !== 'undefined' ? localStorage.getItem('theme') : null
-    return saved || 'dark'
+  const [theme, setTheme] = useState<'abyss' | 'lemonade'>(() => {
+    if (typeof window === 'undefined') return 'abyss'
+    
+    const saved = localStorage.getItem('theme') as 'abyss' | 'lemonade' | null
+    if (saved) return saved
+    
+    // Check system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    return prefersDark ? 'abyss' : 'lemonade'
   })
 
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+    // Set the data-theme attribute for daisyUI on both html and document.documentElement
+    const htmlElement = document.documentElement
+    htmlElement.setAttribute('data-theme', theme)
+    // Also ensure theme context value is logged for debugging
+    console.log('Theme set to:', theme)
     localStorage.setItem('theme', theme)
   }, [theme])
 
-  const toggleTheme = () => setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))
+  const toggleTheme = () => setTheme(prev => (prev === 'abyss' ? 'lemonade' : 'abyss'))
 
   const value: ThemeContextValue = {
     theme,
     toggleTheme,
-    isDark: theme === 'dark',
+    isDark: theme === 'abyss',
   }
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

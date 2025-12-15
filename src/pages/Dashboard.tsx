@@ -114,7 +114,13 @@ const Dashboard: React.FC = () => {
   const renderTrades = [...recentTrades].reverse()
   const equityData = renderTrades.reduce((acc: any[], trade: any) => {
     const prevValue = acc.length > 0 ? acc[acc.length - 1].value : 0
-    acc.push({ date: new Date(trade.trade_date).toLocaleDateString(), value: prevValue + (trade.pnl || 0) })
+    const value = prevValue + (trade.pnl || 0)
+    acc.push({
+      date: new Date(trade.trade_date).toLocaleDateString(),
+      value,
+      positive: value > 0 ? value : 0,
+      negative: value < 0 ? value : 0,
+    })
     return acc
   }, [])
 
@@ -127,63 +133,81 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-btn"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6 fade-in">
+      
       <div>
-        <h1 className="text-2xl font-bold text-white mb-2">Dashboard</h1>
-        <p className="text-gray-400">Overview of your trading performance and recent activity.</p>
+        <h1 className="text-2xl font-bold text-base-content mb-2">Dashboard</h1>
+        <p className="text-base-content/70">Overview of your trading performance and recent activity.</p>
       </div>
-
+    
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <div className="card">
-          <h3 className="text-sm font-medium text-gray-400 mb-1">Total Trades</h3>
-          <p className="text-3xl font-bold text-white">{stats.totalTrades}</p>
+          <h3 className="text-sm font-medium text-base-content/70 mb-1">Total Trades</h3>
+          <p className="text-3xl font-bold text-base-content">{stats.totalTrades}</p>
         </div>
 
         <div className="card">
-          <h3 className="text-sm font-medium text-gray-400 mb-1">Win Rate</h3>
-          <p className={`text-3xl font-bold ${stats.winRate >= 50 ? 'text-profit' : 'text-loss'}`}>{stats.winRate.toFixed(1)}%</p>
+          <h3 className="text-sm font-medium text-base-content/70 mb-1">Win Rate</h3>
+          <p className={`text-3xl font-bold ${stats.winRate >= 50 ? 'text-success' : 'text-error'}`}>{stats.winRate.toFixed(1)}%</p>
         </div>
 
         <div className="card">
-          <h3 className="text-sm font-medium text-gray-400 mb-1">Total P&L</h3>
-          <p className={`text-3xl font-bold ${stats.totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>{stats.totalPnL >= 0 ? '+' : ''}{stats.totalPnL.toFixed(2)}</p>
+          <h3 className="text-sm font-medium text-base-content/70 mb-1">Total P&L</h3>
+          <p className={`text-3xl font-bold ${stats.totalPnL >= 0 ? 'text-success' : 'text-error'}`}>{stats.totalPnL >= 0 ? '+' : ''}{stats.totalPnL.toFixed(2)}</p>
         </div>
 
         <div className="card">
-          <h3 className="text-sm font-medium text-gray-400 mb-1">Expectancy</h3>
-          <p className={`text-3xl font-bold ${stats.expectancy >= 0 ? 'text-profit' : 'text-loss'}`}>{stats.expectancy.toFixed(2)}</p>
+          <h3 className="text-sm font-medium text-base-content/70 mb-1">Expectancy</h3>
+          <p className={`text-3xl font-bold ${stats.expectancy >= 0 ? 'text-success' : 'text-error'}`}>{stats.expectancy.toFixed(2)}</p>
         </div>
 
         <div className="card">
-          <h3 className="text-sm font-medium text-gray-400 mb-1">Max Drawdown</h3>
-          <p className="text-3xl font-bold text-loss">{stats.maxDrawdown.toFixed(2)}</p>
+          <h3 className="text-sm font-medium text-base-content/70 mb-1">Max Drawdown</h3>
+          <p className="text-3xl font-bold text-error">{stats.maxDrawdown.toFixed(2)}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
-          <h3 className="text-lg font-semibold text-white mb-4">Equity Curve</h3>
+          <h3 className="text-lg font-semibold text-base-content mb-4">Equity Curve</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={equityData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
-                <XAxis dataKey="date" stroke="#9CA3AF" fontSize={12} />
-                <YAxis stroke="#9CA3AF" fontSize={12} />
-                <Tooltip contentStyle={{ backgroundColor: '#2A2A2A', border: '1px solid #404040' }} labelStyle={{ color: '#FFFFFF' }} />
-                <Area type="monotone" dataKey="value" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.3} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(0, 0, 0, 0.1)" />
+                <XAxis dataKey="date" stroke="currentColor" fontSize={12} />
+                <YAxis stroke="currentColor" fontSize={12} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--fallback-b1,oklch(98% 0.03 307.4))', border: '1px solid var(--fallback-bc,oklch(27% 0.04 307.5))' }} labelStyle={{ color: 'var(--fallback-bc,oklch(27% 0.04 307.5))' }} />
+                {/* Positive area (values > 0) - uses --app-success with fallbacks */}
+                <Area
+                  type="monotone"
+                  dataKey="positive"
+                  stroke="var(--app-success, var(--success, #22C55E))"
+                  fill="var(--app-success, var(--success, #22C55E))"
+                  fillOpacity={0.28}
+                  isAnimationActive={false}
+                />
+                {/* Negative area (values < 0) - uses --app-error with fallbacks */}
+                <Area
+                  type="monotone"
+                  dataKey="negative"
+                  stroke="var(--app-error, var(--error, #EF4444))"
+                  fill="var(--app-error, var(--error, #EF4444))"
+                  fillOpacity={0.28}
+                  isAnimationActive={false}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         <div className="card">
-          <h3 className="text-lg font-semibold text-white mb-4">Wins vs Losses</h3>
+          <h3 className="text-lg font-semibold text-base-content mb-4">Wins vs Losses</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -200,44 +224,44 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="card">
-        <h3 className="text-lg font-semibold text-white mb-4">Detailed Statistics</h3>
+        <h3 className="text-lg font-semibold text-base-content mb-4">Detailed Statistics</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="text-center p-4 bg-dark-bg rounded-lg">
-            <h4 className="text-sm font-medium text-gray-400 mb-1">Profit Factor</h4>
-            <p className="text-2xl font-bold text-white">{stats.profitFactor === Infinity ? '∞' : stats.profitFactor.toFixed(2)}</p>
+          <div className="text-center p-4 bg-base-300 rounded-lg">
+            <h4 className="text-sm font-medium text-base-content/70 mb-1">Profit Factor</h4>
+            <p className="text-2xl font-bold text-base-content">{stats.profitFactor === Infinity ? '∞' : stats.profitFactor.toFixed(2)}</p>
           </div>
 
-          <div className="text-center p-4 bg-dark-bg rounded-lg">
-            <h4 className="text-sm font-medium text-gray-400 mb-1">Avg Win</h4>
-            <p className="text-2xl font-bold text-profit">+${stats.averageWin.toFixed(2)}</p>
+          <div className="text-center p-4 bg-base-300 rounded-lg">
+            <h4 className="text-sm font-medium text-base-content/70 mb-1">Avg Win</h4>
+            <p className="text-2xl font-bold text-success">+${stats.averageWin.toFixed(2)}</p>
           </div>
 
-          <div className="text-center p-4 bg-dark-bg rounded-lg">
-            <h4 className="text-sm font-medium text-gray-400 mb-1">Avg Loss</h4>
-            <p className="text-2xl font-bold text-loss">{stats.averageLoss.toFixed(2)}</p>
+          <div className="text-center p-4 bg-base-300 rounded-lg">
+            <h4 className="text-sm font-medium text-base-content/70 mb-1">Avg Loss</h4>
+            <p className="text-2xl font-bold text-error">{stats.averageLoss.toFixed(2)}</p>
           </div>
 
-          <div className="text-center p-4 bg-dark-bg rounded-lg">
-            <h4 className="text-sm font-medium text-gray-400 mb-1">Best / Worst</h4>
-            <p className="text-xl font-bold"><span className="text-profit">+${stats.bestWin.toFixed(2)}</span><span className="text-gray-400 mx-1">/</span><span className="text-loss">{stats.worstLoss.toFixed(2)}</span></p>
+          <div className="text-center p-4 bg-base-300 rounded-lg">
+            <h4 className="text-sm font-medium text-base-content/70 mb-1">Best / Worst</h4>
+            <p className="text-xl font-bold"><span className="text-success">+${stats.bestWin.toFixed(2)}</span><span className="text-base-content/50 mx-1">/</span><span className="text-error">{stats.worstLoss.toFixed(2)}</span></p>
           </div>
         </div>
       </div>
 
       <div className="card">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">Recent Trades</h3>
-          <Link to="/trades" className="text-primary-btn hover:text-blue-400">View All →</Link>
+          <h3 className="text-lg font-semibold text-base-content">Recent Trades</h3>
+          <Link to="/trades" className="text-primary hover:text-primary-focus">View All →</Link>
         </div>
 
         {recentTrades.length === 0 ? (
           <div className="text-center py-8">
-            <div className="text-gray-400 text-lg mb-2">No trades yet</div>
-            <Link to="/trades/add" className="btn-primary mt-4 inline-block">Add Your First Trade</Link>
+            <div className="text-base-content/70 text-lg mb-2">No trades yet</div>
+            <Link to="/trades/add" className="btn btn-primary mt-4 inline-block">Add Your First Trade</Link>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-dark-border">
+            <table className="min-w-full divide-y divide-base-300">
               <thead className="table-header">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date</th>
@@ -247,14 +271,14 @@ const Dashboard: React.FC = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">P&L %</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-dark-border">
+              <tbody className="divide-y divide-base-300">
                 {recentTrades.map((trade) => (
                   <tr key={trade.id} className="table-row">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{new Date(trade.trade_date).toLocaleDateString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap"><div><div className="text-sm font-medium text-white">{trade.asset_symbol}</div><div className="text-xs text-gray-500">{trade.asset_type}</div></div></td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm"><span className={`font-medium ${trade.position_direction === 'short' ? 'text-red-400' : 'text-green-400'}`}>{trade.position_direction === 'short' ? '📉' : '📈'}</span></td>
-                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${trade.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>{trade.pnl >= 0 ? '+' : ''}{trade.pnl?.toFixed(2)}</td>
-                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${trade.pnl_percentage >= 0 ? 'text-profit' : 'text-loss'}`}>{trade.pnl_percentage >= 0 ? '+' : ''}{trade.pnl_percentage?.toFixed(2)}%</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-base-content/70">{new Date(trade.trade_date).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap"><div><div className="text-sm font-medium text-base-content">{trade.asset_symbol}</div><div className="text-xs text-base-content/50">{trade.asset_type}</div></div></td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm"><span className={`font-medium ${trade.position_direction === 'short' ? 'text-error' : 'text-success'}`}>{trade.position_direction === 'short' ? '📉' : '📈'}</span></td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${trade.pnl >= 0 ? 'text-success' : 'text-error'}`}>{trade.pnl >= 0 ? '+' : ''}{trade.pnl?.toFixed(2)}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-semibold ${trade.pnl_percentage >= 0 ? 'text-success' : 'text-error'}`}>{trade.pnl_percentage >= 0 ? '+' : ''}{trade.pnl_percentage?.toFixed(2)}%</td>
                   </tr>
                 ))}
               </tbody>

@@ -139,7 +139,7 @@ const Analytics: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-btn"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     )
   }
@@ -148,32 +148,32 @@ const Analytics: React.FC = () => {
     <div className="space-y-6 fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white mb-2">Analytics</h1>
-          <p className="text-gray-400">In-depth analysis of your trading performance.</p>
+          <h1 className="text-2xl font-bold text-base-content mb-2">Analytics</h1>
+          <p className="text-base-content/70">In-depth analysis of your trading performance.</p>
         </div>
 
         <div className="flex gap-2">
-          <button onClick={handleExportCSV} className="btn-secondary">Export CSV</button>
-          <button onClick={handleExportPDF} className="btn-secondary">Export PDF</button>
+          <button onClick={handleExportCSV} className="btn btn-secondary">Export CSV</button>
+          <button onClick={handleExportPDF} className="btn btn-secondary">Export PDF</button>
         </div>
       </div>
 
       <div className="card">
-        <h3 className="text-lg font-semibold text-white mb-4">Filters</h3>
+        <h3 className="text-lg font-semibold text-base-content mb-4">Filters</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">From Date</label>
-            <input type="date" value={dateRange.startDate} onChange={(e) => setDateRange((prev:any) => ({ ...prev, startDate: e.target.value }))} className="input-field" />
+            <label className="block text-sm font-medium text-base-content mb-2">From Date</label>
+            <input type="date" value={dateRange.startDate} onChange={(e) => setDateRange((prev:any) => ({ ...prev, startDate: e.target.value }))} className="input input-bordered w-full" />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">To Date</label>
-            <input type="date" value={dateRange.endDate} onChange={(e) => setDateRange((prev:any) => ({ ...prev, endDate: e.target.value }))} className="input-field" />
+            <label className="block text-sm font-medium text-base-content mb-2">To Date</label>
+            <input type="date" value={dateRange.endDate} onChange={(e) => setDateRange((prev:any) => ({ ...prev, endDate: e.target.value }))} className="input input-bordered w-full" />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Asset Type</label>
-            <select value={assetType} onChange={(e) => setAssetType(e.target.value)} className="input-field">
+            <label className="block text-sm font-medium text-base-content mb-2">Asset Type</label>
+            <select value={assetType} onChange={(e) => setAssetType(e.target.value)} className="select select-bordered w-full">
               <option value="">All Types</option>
               <option value="stocks">Stocks</option>
               <option value="forex">Forex</option>
@@ -185,40 +185,40 @@ const Analytics: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Tagged Trades</label>
+            <label className="block text-sm font-medium text-base-content mb-2">Tagged Trades</label>
             <TagSelector selectedTags={selectedTags} onTagsChange={setSelectedTags} />
           </div>
         </div>
 
         <div className="mt-4">
-          <button onClick={() => { setDateRange({ startDate: '', endDate: '' }); setAssetType(''); setSelectedTags([]) }} className="btn-secondary">Clear Filters</button>
+          <button onClick={() => { setDateRange({ startDate: '', endDate: '' }); setAssetType(''); setSelectedTags([]) }} className="btn btn-secondary">Clear Filters</button>
         </div>
       </div>
 
       <div className="card">
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-white mb-2">Showing {filteredTrades.length} trades</h3>
-          <p className="text-gray-400">{trades.length} total trades in your journal</p>
+          <h3 className="text-lg font-semibold text-base-content mb-2">Showing {filteredTrades.length} trades</h3>
+          <p className="text-base-content/70">{trades.length} total trades in your journal</p>
         </div>
       </div>
 
       {filteredTrades.length > 0 && stats && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            <div className="card"><h3 className="text-sm font-medium text-gray-400 mb-1">Total Trades</h3><p className="text-3xl font-bold text-white">{stats.totalTrades}</p></div>
-            <div className="card"><h3 className="text-sm font-medium text-gray-400 mb-1">Win Rate</h3><p className={`text-3xl font-bold ${stats.winRate >= 50 ? 'text-profit' : 'text-loss'}`}>{stats.winRate.toFixed(1)}%</p></div>
-            <div className="card"><h3 className="text-sm font-medium text-gray-400 mb-1">Total P&L</h3><p className={`text-3xl font-bold ${stats.totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>{stats.totalPnL >= 0 ? '+' : ''}{stats.totalPnL.toFixed(2)}</p></div>
-            <div className="card"><h3 className="text-sm font-medium text-gray-400 mb-1">Expectancy</h3><p className={`text-3xl font-bold ${stats.expectancy >= 0 ? 'text-profit' : 'text-loss'}`}>{stats.expectancy.toFixed(2)}</p></div>
-            <div className="card"><h3 className="text-sm font-medium text-gray-400 mb-1">Max Drawdown</h3><p className="text-3xl font-bold text-loss">{stats.maxDrawdown.toFixed(2)}</p></div>
+            <div className="card"><h3 className="text-sm font-medium text-base-content/70 mb-1">Total Trades</h3><p className="text-3xl font-bold text-base-content">{stats.totalTrades}</p></div>
+            <div className="card"><h3 className="text-sm font-medium text-base-content/70 mb-1">Win Rate</h3><p className={`text-3xl font-bold ${stats.winRate >= 50 ? 'text-success' : 'text-error'}`}>{stats.winRate.toFixed(1)}%</p></div>
+            <div className="card"><h3 className="text-sm font-medium text-base-content/70 mb-1">Total P&L</h3><p className={`text-3xl font-bold ${stats.totalPnL >= 0 ? 'text-success' : 'text-error'}`}>{stats.totalPnL >= 0 ? '+' : ''}{stats.totalPnL.toFixed(2)}</p></div>
+            <div className="card"><h3 className="text-sm font-medium text-base-content/70 mb-1">Expectancy</h3><p className={`text-3xl font-bold ${stats.expectancy >= 0 ? 'text-success' : 'text-error'}`}>{stats.expectancy.toFixed(2)}</p></div>
+            <div className="card"><h3 className="text-sm font-medium text-base-content/70 mb-1">Max Drawdown</h3><p className="text-3xl font-bold text-error">{stats.maxDrawdown.toFixed(2)}</p></div>
           </div>
 
           <div className="card">
-            <div className="border-b border-dark-border mb-6">
+            <div className="border-b border-base-300 mb-6">
               <nav className="flex space-x-8">
-                <button onClick={() => setView('overview')} className={`py-2 px-1 border-b-2 font-medium text-sm ${view === 'overview' ? 'border-primary-btn text-primary-btn' : 'border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-300'}`}>Overview</button>
-                <button onClick={() => setView('performance')} className={`py-2 px-1 border-b-2 font-medium text-sm ${view === 'performance' ? 'border-primary-btn text-primary-btn' : 'border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-300'}`}>Performance</button>
-                <button onClick={() => setView('risk')} className={`py-2 px-1 border-b-2 font-medium text-sm ${view === 'risk' ? 'border-primary-btn text-primary-btn' : 'border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-300'}`}>Risk Analysis</button>
-                <button onClick={() => setView('strategy')} className={`py-2 px-1 border-b-2 font-medium text-sm ${view === 'strategy' ? 'border-primary-btn text-primary-btn' : 'border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-300'}`}>By Strategy</button>
+                <button onClick={() => setView('overview')} className={`py-2 px-1 border-b-2 font-medium text-sm ${view === 'overview' ? 'border-primary text-primary' : 'border-transparent text-base-content/50 hover:text-base-content hover:border-base-300'}`}>Overview</button>
+                <button onClick={() => setView('performance')} className={`py-2 px-1 border-b-2 font-medium text-sm ${view === 'performance' ? 'border-primary text-primary' : 'border-transparent text-base-content/50 hover:text-base-content hover:border-base-300'}`}>Performance</button>
+                <button onClick={() => setView('risk')} className={`py-2 px-1 border-b-2 font-medium text-sm ${view === 'risk' ? 'border-primary text-primary' : 'border-transparent text-base-content/50 hover:text-base-content hover:border-base-300'}`}>Risk Analysis</button>
+                <button onClick={() => setView('strategy')} className={`py-2 px-1 border-b-2 font-medium text-sm ${view === 'strategy' ? 'border-primary text-primary' : 'border-transparent text-base-content/50 hover:text-base-content hover:border-base-300'}`}>By Strategy</button>
               </nav>
             </div>
 
@@ -231,7 +231,7 @@ const Analytics: React.FC = () => {
       )}
 
       {filteredTrades.length === 0 && (
-        <div className="card"><div className="text-center py-12"><div className="text-gray-400 text-lg mb-2">No trades match your filters</div><p className="text-gray-500">Try adjusting your filter criteria</p></div></div>
+        <div className="card"><div className="text-center py-12"><div className="text-base-content/70 text-lg mb-2">No trades match your filters</div><p className="text-base-content/50">Try adjusting your filter criteria</p></div></div>
       )}
     </div>
   )
@@ -264,8 +264,8 @@ const OverviewView: React.FC<any> = ({ trades, stats }) => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
-          <h4 className="text-sm font-medium text-gray-400 mb-3">Equity Curve</h4>
-          <div className="h-64 bg-dark-bg rounded-lg p-4">
+          <h4 className="text-sm font-medium text-base-content/70 mb-3">Equity Curve</h4>
+          <div className="h-64 bg-base-bg rounded-lg p-4">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={equityData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
@@ -279,8 +279,8 @@ const OverviewView: React.FC<any> = ({ trades, stats }) => {
         </div>
 
         <div>
-          <h4 className="text-sm font-medium text-gray-400 mb-3">Wins vs Losses</h4>
-          <div className="h-64 bg-dark-bg rounded-lg p-4">
+          <h4 className="text-sm font-medium text-base-content/70 mb-3">Wins vs Losses</h4>
+          <div className="h-64 bg-base-bg rounded-lg p-4">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={distributionData} cx="50%" cy="50%" outerRadius={80} fill="#8884d8" dataKey="value" label>
@@ -296,10 +296,10 @@ const OverviewView: React.FC<any> = ({ trades, stats }) => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="text-center p-4 bg-dark-bg rounded-lg"><h4 className="text-sm font-medium text-gray-400 mb-1">Avg Win</h4><p className="text-xl font-bold text-profit">${stats.averageWin.toFixed(2)}</p></div>
-        <div className="text-center p-4 bg-dark-bg rounded-lg"><h4 className="text-sm font-medium text-gray-400 mb-1">Avg Loss</h4><p className="text-xl font-bold text-loss">${stats.averageLoss.toFixed(2)}</p></div>
-        <div className="text-center p-4 bg-dark-bg rounded-lg"><h4 className="text-sm font-medium text-gray-400 mb-1">Best Win</h4><p className="text-xl font-bold text-profit">${stats.bestWin.toFixed(2)}</p></div>
-        <div className="text-center p-4 bg-dark-bg rounded-lg"><h4 className="text-sm font-medium text-gray-400 mb-1">Worst Loss</h4><p className="text-xl font-bold text-loss">${stats.worstLoss.toFixed(2)}</p></div>
+        <div className="text-center p-4 bg-base-bg rounded-lg"><h4 className="text-sm font-medium text-base-content/70 mb-1">Avg Win</h4><p className="text-xl font-bold text-success">${stats.averageWin.toFixed(2)}</p></div>
+        <div className="text-center p-4 bg-base-bg rounded-lg"><h4 className="text-sm font-medium text-base-content/70 mb-1">Avg Loss</h4><p className="text-xl font-bold text-error">${stats.averageLoss.toFixed(2)}</p></div>
+        <div className="text-center p-4 bg-base-bg rounded-lg"><h4 className="text-sm font-medium text-base-content/70 mb-1">Best Win</h4><p className="text-xl font-bold text-success">${stats.bestWin.toFixed(2)}</p></div>
+        <div className="text-center p-4 bg-base-bg rounded-lg"><h4 className="text-sm font-medium text-base-content/70 mb-1">Worst Loss</h4><p className="text-xl font-bold text-error">${stats.worstLoss.toFixed(2)}</p></div>
       </div>
     </div>
   )
@@ -309,9 +309,9 @@ const PerformanceView: React.FC<any> = ({ trades, stats }) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="text-center p-6 bg-dark-bg rounded-lg"><h4 className="text-sm font-medium text-gray-400 mb-2">Total Return</h4><p className="text-3xl font-bold {stats.totalPnL >= 0 ? 'text-profit' : 'text-loss'}">{stats.totalPnL > 0 ? '+' : ''}{stats.totalPnL.toFixed(2)}</p></div>
-        <div className="text-center p-6 bg-dark-bg rounded-lg"><h4 className="text-sm font-medium text-gray-400 mb-2">Profit Factor</h4><p className="text-3xl font-bold text-white">{stats.profitFactor === Infinity ? '∞' : stats.profitFactor.toFixed(2)}</p><p className="text-xs text-gray-500 mt-1">{stats.profitFactor >= 1.5 ? 'Excellent' : stats.profitFactor >= 1 ? 'Good' : 'Needs Improvement'}</p></div>
-        <div className="text-center p-6 bg-dark-bg rounded-lg"><h4 className="text-sm font-medium text-gray-400 mb-2">Expectancy</h4><p className="text-3xl font-bold {stats.expectancy >= 0 ? 'text-profit' : 'text-loss'}">{stats.expectancy.toFixed(2)}</p><p className="text-xs text-gray-500 mt-1">{stats.expectancy > 0 ? 'Positive Edge' : 'Negative Edge'}</p></div>
+        <div className="text-center p-6 bg-base-bg rounded-lg"><h4 className="text-sm font-medium text-base-content/70 mb-2">Total Return</h4><p className="text-3xl font-bold {stats.totalPnL >= 0 ? 'text-success' : 'text-error'}">{stats.totalPnL > 0 ? '+' : ''}{stats.totalPnL.toFixed(2)}</p></div>
+        <div className="text-center p-6 bg-base-bg rounded-lg"><h4 className="text-sm font-medium text-base-content/70 mb-2">Profit Factor</h4><p className="text-3xl font-bold text-base-content">{stats.profitFactor === Infinity ? '∞' : stats.profitFactor.toFixed(2)}</p><p className="text-xs text-base-content/50 mt-1">{stats.profitFactor >= 1.5 ? 'Excellent' : stats.profitFactor >= 1 ? 'Good' : 'Needs Improvement'}</p></div>
+        <div className="text-center p-6 bg-base-bg rounded-lg"><h4 className="text-sm font-medium text-base-content/70 mb-2">Expectancy</h4><p className="text-3xl font-bold {stats.expectancy >= 0 ? 'text-success' : 'text-error'}">{stats.expectancy.toFixed(2)}</p><p className="text-xs text-base-content/50 mt-1">{stats.expectancy > 0 ? 'Positive Edge' : 'Negative Edge'}</p></div>
       </div>
     </div>
   )
@@ -320,11 +320,11 @@ const PerformanceView: React.FC<any> = ({ trades, stats }) => {
 const RiskView: React.FC<any> = ({ trades }) => {
   return (
     <div className="space-y-6">
-      <div className="text-center p-8 bg-dark-bg rounded-lg">
-        <h4 className="text-lg font-medium text-gray-400 mb-4">Risk Metrics</h4>
+      <div className="text-center p-8 bg-base-bg rounded-lg">
+        <h4 className="text-lg font-medium text-base-content/70 mb-4">Risk Metrics</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div><p className="text-sm text-gray-500 mb-1">Max Consecutive Wins</p><p className="text-2xl font-bold text-profit">{calculateMaxConsecutiveWins(trades)}</p></div>
-          <div><p className="text-sm text-gray-500 mb-1">Max Consecutive Losses</p><p className="text-2xl font-bold text-loss">{calculateMaxConsecutiveLosses(trades)}</p></div>
+          <div><p className="text-sm text-base-content/50 mb-1">Max Consecutive Wins</p><p className="text-2xl font-bold text-success">{calculateMaxConsecutiveWins(trades)}</p></div>
+          <div><p className="text-sm text-base-content/50 mb-1">Max Consecutive Losses</p><p className="text-2xl font-bold text-error">{calculateMaxConsecutiveLosses(trades)}</p></div>
         </div>
       </div>
     </div>
@@ -334,7 +334,7 @@ const RiskView: React.FC<any> = ({ trades }) => {
 const StrategyView: React.FC<any> = ({ trades }) => {
   return (
     <div className="space-y-6">
-      <div className="text-center p-8 bg-dark-bg rounded-lg"><h4 className="text-lg font-medium text-gray-400 mb-4">Strategy Performance</h4><p className="text-gray-500">Strategy analysis coming soon...</p></div>
+      <div className="text-center p-8 bg-base-bg rounded-lg"><h4 className="text-lg font-medium text-base-content/70 mb-4">Strategy Performance</h4><p className="text-base-content/50">Strategy analysis coming soon...</p></div>
     </div>
   )
 }

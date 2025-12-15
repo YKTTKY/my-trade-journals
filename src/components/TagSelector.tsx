@@ -87,11 +87,11 @@ const TagSelector: React.FC<Props> = ({ selectedTags, onTagsChange }) => {
 
   return (
     <div className="space-y-4">
-      <label className="block text-sm font-medium text-gray-300">Tags</label>
+      <label className="block text-sm font-medium text-base-content">Tags</label>
 
       {Object.entries(groupedTags).map(([category, categoryTags]) => (
         <div key={category}>
-          <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+          <div className="text-xs font-medium text-base-content/60 uppercase tracking-wider mb-2">
             {category.replace('-', ' ')} {CATEGORY_EMOJIS[category] || '🏷️'}
           </div>
 
@@ -103,7 +103,7 @@ const TagSelector: React.FC<Props> = ({ selectedTags, onTagsChange }) => {
                   key={tag.id}
                   onClick={() => toggleTag(tag)}
                   className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
-                    isSelected ? 'bg-primary-btn text-white' : 'bg-dark-bg text-gray-300 hover:bg-dark-border'
+                    isSelected ? 'bg-primary text-primary-content' : 'bg-base-300 text-base-content hover:bg-base-200'
                   }`}
                   type="button"
                 >
@@ -122,14 +122,14 @@ const TagSelector: React.FC<Props> = ({ selectedTags, onTagsChange }) => {
           value={newTagName}
           onChange={(e) => setNewTagName(e.target.value)}
           placeholder="Add new tag..."
-          className="input-field flex-1"
+          className="input input-bordered flex-1"
           disabled={loading}
         />
 
         <select
           value={newTagCategory}
           onChange={(e) => setNewTagCategory(e.target.value)}
-          className="input-field"
+          className="select select-bordered"
           disabled={loading}
         >
           <option value="strategy">Strategy</option>
@@ -139,14 +139,14 @@ const TagSelector: React.FC<Props> = ({ selectedTags, onTagsChange }) => {
           <option value="other">Other</option>
         </select>
 
-        <button type="submit" className="btn-primary px-4" disabled={loading || !newTagName.trim()}>
+        <button type="submit" className="btn btn-primary px-4" disabled={loading || !newTagName.trim()}>
           Add
         </button>
       </form>
 
       {loading && (
         <div className="text-center py-2">
-          <svg className="animate-spin h-5 w-5 text-primary-btn mx-auto" fill="none" viewBox="0 0 24 24">
+          <svg className="animate-spin h-5 w-5 text-primary mx-auto" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
           </svg>

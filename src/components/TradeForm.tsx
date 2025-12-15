@@ -121,7 +121,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label htmlFor="asset_type" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="asset_type" className="block text-sm font-medium text-base-content mb-2">
             Asset Type
           </label>
           <select
@@ -129,7 +129,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             name="asset_type"
             value={formData.asset_type}
             onChange={handleChange}
-            className="input-field"
+            className="select select-bordered w-full"
             required
           >
             <option value="stocks">Stocks</option>
@@ -142,7 +142,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
         </div>
 
         <div>
-          <label htmlFor="asset_symbol" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="asset_symbol" className="block text-sm font-medium text-base-content mb-2">
             Asset Symbol
           </label>
           <input
@@ -151,14 +151,14 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             type="text"
             value={formData.asset_symbol}
             onChange={handleChange}
-            className="input-field"
+            className="input input-bordered w-full"
             placeholder="e.g., AAPL, BTC, EURUSD"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="position_direction" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="position_direction" className="block text-sm font-medium text-base-content mb-2">
             Position Direction
           </label>
           <select
@@ -166,7 +166,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             name="position_direction"
             value={formData.position_direction}
             onChange={handleChange}
-            className="input-field"
+            className="select select-bordered w-full"
             required
           >
             <option value="long">Long 📈</option>
@@ -177,7 +177,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div>
-          <label htmlFor="entry_price" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="entry_price" className="block text-sm font-medium text-base-content mb-2">
             Entry Price
           </label>
           <input
@@ -187,14 +187,14 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             step="0.01"
             value={formData.entry_price}
             onChange={handleChange}
-            className="input-field"
+            className="input input-bordered w-full"
             placeholder="0.00"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="exit_price" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="exit_price" className="block text-sm font-medium text-base-content mb-2">
             Exit Price
           </label>
           <input
@@ -204,14 +204,14 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             step="0.01"
             value={formData.exit_price}
             onChange={handleChange}
-            className="input-field"
+            className="input input-bordered w-full"
             placeholder="0.00"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="position_size" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="position_size" className="block text-sm font-medium text-base-content mb-2">
             Position Size
           </label>
           <input
@@ -221,7 +221,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             step="0.01"
             value={formData.position_size}
             onChange={handleChange}
-            className="input-field"
+            className="input input-bordered w-full"
             placeholder="0"
             required
           />
@@ -229,7 +229,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
 
         {formData.asset_type === 'futures' && (
           <div>
-            <label htmlFor="point_value" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="point_value" className="block text-sm font-medium text-base-content mb-2">
               Point Value ($)
             </label>
             <input
@@ -239,18 +239,18 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
               step="0.01"
               value={formData.point_value}
               onChange={handleChange}
-              className="input-field"
+              className="input input-bordered w-full"
               placeholder="20"
               required
             />
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-base-content/60 mt-1">
               For NQ: $20 per point. For ES: $50 per point.
             </p>
           </div>
         )}
 
         <div>
-          <label htmlFor="fees" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="fees" className="block text-sm font-medium text-base-content mb-2">
             Fees
           </label>
           <input
@@ -260,7 +260,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             step="0.01"
             value={formData.fees}
             onChange={handleChange}
-            className="input-field"
+            className="input input-bordered w-full"
             placeholder="0.00"
           />
         </div>
@@ -268,7 +268,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label htmlFor="stop_loss" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="stop_loss" className="block text-sm font-medium text-base-content mb-2">
             Stop Loss (Optional)
           </label>
           <input
@@ -278,13 +278,13 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             step="0.01"
             value={formData.stop_loss}
             onChange={handleChange}
-            className="input-field"
+            className="input input-bordered w-full"
             placeholder="0.00"
           />
         </div>
 
         <div>
-          <label htmlFor="take_profit" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="take_profit" className="block text-sm font-medium text-base-content mb-2">
             Take Profit (Optional)
           </label>
           <input
@@ -294,13 +294,13 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             step="0.01"
             value={formData.take_profit}
             onChange={handleChange}
-            className="input-field"
+            className="input input-bordered w-full"
             placeholder="0.00"
           />
         </div>
 
         <div>
-          <label htmlFor="trade_date" className="block text-sm font-medium text-gray-300 mb-2">
+          <label htmlFor="trade_date" className="block text-sm font-medium text-base-content mb-2">
             Trade Date & Time
           </label>
           <input
@@ -309,10 +309,10 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
             type="datetime-local"
             value={formData.trade_date}
             onChange={handleChange}
-            className="input-field"
+            className="input input-bordered w-full"
             required
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-base-content/60 mt-1">
             🕒 Hong Kong Time (UTC+8)
           </p>
         </div>
@@ -320,26 +320,26 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="card p-4">
-          <h3 className="text-sm font-medium text-gray-400 mb-1">Profit/Loss</h3>
+          <h3 className="text-sm font-medium text-base-content/70 mb-1">Profit/Loss</h3>
           <p className={`text-2xl font-bold ${
-            calculatedPnL >= 0 ? 'text-profit' : 'text-loss'
+            calculatedPnL >= 0 ? 'text-success' : 'text-error'
           }`}>
             {calculatedPnL >= 0 ? '+' : ''}{calculatedPnL.toFixed(2)}
           </p>
         </div>
 
         <div className="card p-4">
-          <h3 className="text-sm font-medium text-gray-400 mb-1">P&L %</h3>
+          <h3 className="text-sm font-medium text-base-content/70 mb-1">P&L %</h3>
           <p className={`text-2xl font-bold ${
-            calculatedPnLPercentage >= 0 ? 'text-profit' : 'text-loss'
+            calculatedPnLPercentage >= 0 ? 'text-success' : 'text-error'
           }`}>
             {calculatedPnLPercentage >= 0 ? '+' : ''}{calculatedPnLPercentage.toFixed(2)}%
           </p>
         </div>
 
         <div className="card p-4">
-          <h3 className="text-sm font-medium text-gray-400 mb-1">Risk:Reward</h3>
-          <p className="text-2xl font-bold text-white">
+          <h3 className="text-sm font-medium text-base-content/70 mb-1">Risk:Reward</h3>
+          <p className="text-2xl font-bold text-base-content">
             {calculatedRR.toFixed(2)}:1
           </p>
         </div>
@@ -353,7 +353,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
       </div>
 
       <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-300 mb-2">
+        <label htmlFor="notes" className="block text-sm font-medium text-base-content mb-2">
           Notes (Optional)
         </label>
         <textarea
@@ -362,7 +362,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
           rows={4}
           value={formData.notes}
           onChange={handleChange}
-          className="input-field"
+          className="textarea textarea-bordered w-full"
           placeholder="Add any additional notes about this trade..."
         />
       </div>
@@ -371,11 +371,11 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
         <button
           type="submit"
           disabled={loading}
-          className="btn-primary flex-1"
+          className="btn btn-primary flex-1"
         >
           {loading ? (
             <div className="flex items-center justify-center">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
@@ -389,7 +389,7 @@ const TradeForm: React.FC<TradeFormProps> = ({ initialData = {}, onSubmit, loadi
         <button
           type="button"
           onClick={handleCancel}
-          className="btn-secondary"
+          className="btn btn-secondary"
           disabled={loading}
         >
           Cancel
